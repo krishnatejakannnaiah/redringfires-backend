@@ -11,7 +11,7 @@ const app = express();
 
 const port = process.env.PORT || 5005;
 app.use(express.json());
-app.use("/api/contacts", require('./routes/contactroute'));
+app.use("/", require('./routes/contactroute'));
 app.use(errorHandler);
 
 mongoose.set('strictQuery', false);
