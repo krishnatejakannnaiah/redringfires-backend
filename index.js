@@ -1,5 +1,5 @@
 const express = require("express");
-const errorHandler = require("./middleware/errorhandler");
+const errorHandler = require("./middleware/errorHandler");
 const connectDb = require("./config/dbConnection");
 const { default: mongoose } = require("mongoose");
 const dotenv = require('dotenv').config();
@@ -11,7 +11,7 @@ const app = express();
 
 const port = process.env.PORT || 5005;
 app.use(express.json());
-app.use("/", require('./routes/contactroute'));
+app.use("/api/contacts", require('./routes/contactroute'));
 app.use(errorHandler);
 
 mongoose.set('strictQuery', false);
