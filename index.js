@@ -20,6 +20,8 @@ app.get('/', (req,res) => {
     res.send({title: 'RedRingFires'})
 })
 
-app.listen(port, () => {
-    console.log(`server is running on  ${port}`);
-});
+connectDb().then(() => {
+    app.listen(port, () => {
+        console.log(`server is running on  ${port}`);
+    });
+})
