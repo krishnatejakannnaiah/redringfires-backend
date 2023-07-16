@@ -1,12 +1,12 @@
 // desc Get alL contacts
 // route GET /api/cotacts
-// access public
+// access private
 
 const asyncHandler = require('express-async-handler');
 const Contact = require('../models/contactModal')
 
 const getContacts = asyncHandler(async (req, res) => {
-    const contacts = await Contact.find();
+    const contacts = await Contact.find({user_id: req.user.id});
     res.status(200).json(contacts)
 })
 
@@ -29,7 +29,7 @@ const createContact = asyncHandler(async (req, res) => {
         throw new Error("All fields are mandatory");
     }
     const contact = await Contact.create({
-        name, email, phone
+        name, email, phone, user_id: req.user.id
     })
     res.status(201).json(contact)
 })
@@ -40,6 +40,11 @@ const editContact = asyncHandler(async (req, res) => {
     if (!contact) {
         res.status(404);
         throw new Error("Contact not found!");
+    }
+
+    if (contact.user_id.toString() !== req.user.id) {
+        res.status(403).json({message: "User dont have the permission"});
+        throw new Error("User dont have the permission");
     }
 
     const updatedContact = await Contact.findByIdAndUpdate(
@@ -56,15 +61,19 @@ const deleteContact = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("Contact not found!");
     }
+
+    if (contact.user_id.toString() !== req.user.id) {
+        res.status(403).json({message: "User dont have the permission"});
+        throw new Error("User dont have the permission");
+    }
+    
+
     const deletingContact = await Contact.findByIdAndDelete(
         req.params.id,
     )
     res.status(200).json({data: `deleted contact ${req.params.id}`})
 })
 
-const getUsers = asyncHandler(async (req, res) => {
-    res.status(200).json({data: "get all Users"})
-})
 
 
-module.exports = { getContacts, getContact, createContact, editContact, deleteContact, getUsers };
+module.exports = { getContacts, getContact, createContact, editContact, deleteContact };
