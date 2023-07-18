@@ -8,7 +8,7 @@ router.get("/allposts", getAllPosts);
 
 router.get("/getcurrentposts", validateToken, getPosts)
 
-router.get("/getpost", validateToken, getPost);
+router.get("/getpost:id", validateToken, getPost);
 
 router.post("/createpost", validateToken, createPost);
 
