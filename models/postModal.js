@@ -6,6 +6,14 @@ const postSchema = mongoose.Schema({
         required: true,
         ref: 'User'
     },
+    email: {
+        type: String,
+        required: true,
+    },
+    username: {
+        type: String,
+        required: true,
+    },
     post: {
         type: String,
         required: [true, "please write a post"]
