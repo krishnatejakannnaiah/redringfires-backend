@@ -2,7 +2,6 @@ const asyncHandler = require('express-async-handler');
 
 const postSchema = require("../models/postModal");
 
-
 const getAllPosts = asyncHandler(async (req, res) => {
     const allPosts = await postSchema.find();
     res.status(200).json(allPosts);

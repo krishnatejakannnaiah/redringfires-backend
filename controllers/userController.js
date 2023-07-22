@@ -65,6 +65,9 @@ const currentUser = asyncHandler(async (req,res) => {
     res.json(req.user);
 });
 
+const getAllUsers = asyncHandler(async (req, res) => {
+    const allUsers = await user.find();
+    res.status(200).json(allUsers);
+})
 
-
-module.exports = { registerUser, loginUser, currentUser };
+module.exports = { registerUser, loginUser, currentUser, getAllUsers };

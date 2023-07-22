@@ -6,6 +6,10 @@ const postSchema = mongoose.Schema({
         required: true,
         ref: 'User'
     },
+    clap_id: {
+        type: Array,
+        required: false,
+    },
     email: {
         type: String,
         required: true,
