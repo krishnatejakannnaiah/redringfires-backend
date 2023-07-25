@@ -17,7 +17,7 @@ const errorHandler = (err, req, res, next) => {
         case constants.SERVERERROR:
             res.json({title: "Forbidden request!",message: err.message });
         default:
-            console.log('All good!')
+            console.log('RedRingFires is live yet!')
     }
 
 }

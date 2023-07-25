@@ -10,16 +10,13 @@ const registerUser = asyncHandler(async (req,res) => {
         throw new Error("All fields are mandatory");
     }
     const userAvailable  = await user.findOne({email});
-    console.log("userAvailable", userAvailable)
     if (userAvailable) {
-        console.log('confirming')
         res.status(400).json({message: "user already registered!"});
         throw new Error("user already registered!");
     }
 
     // password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('hashed password', hashedPassword);
     const User = await user.create({
         username, email, password: hashedPassword
     })

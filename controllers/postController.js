@@ -26,13 +26,11 @@ const getPost = asyncHandler(async (req, res) => {
 });
 
 const createPost = asyncHandler(async (req, res) => {
-    console.log(req.body);
     const { post, post_description, category, media_link, media_type} = req.body;
     if (!post || !category) {
         res.status(400).json("All fields are required");
         throw new Error("All fields are required");
     }
-    console.log(req.user)
     const Post = await postSchema.create({
         post, post_description, category, media_link, media_type, user_id: req.user.id, email: req.user.email, username: req.user.username
     })
