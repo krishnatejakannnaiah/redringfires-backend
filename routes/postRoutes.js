@@ -8,13 +8,13 @@ router.get("/allposts", getAllPosts);
 
 router.get("/getcurrentposts", validateToken, getPosts)
 
-router.get("/getpost:id", validateToken, getPost);
+router.get("/getpost/:id", validateToken, getPost);
 
 router.post("/createpost", validateToken, createPost);
 
-router.put("/editpost:id", validateToken, editPost);
+router.put("/editpost/:id", validateToken, editPost);
 
-router.delete("/deletepost:id", validateToken, deletePost);
+router.delete("/deletepost/:id", validateToken, deletePost);
 
 
 module.exports = router;
