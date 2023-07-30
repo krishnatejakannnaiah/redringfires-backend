@@ -49,17 +49,29 @@ const loginUser = asyncHandler(async (req,res) => {
         }, process.env.ACCESS_TOKEN_SECRET,
         {expiresIn: "2880m"}    
     )
+
     res.status(200).json({accessToken})
+
     } else {
         res.status(401).json({message: "email or password is not valid"});
         throw new Error("email or password is not valid")
     }
+
 });
 
 
 //private
 const currentUser = asyncHandler(async (req,res) => {
-    res.json(req.user);
+    // console.log(req.user);
+    // res.json(req.user);
+    const User = await user.findById(req.user.id);
+    if (!User) {
+        res.status(404);
+        throw new Error("User not found!");
+    }
+    else {
+        res.status(200).json(User)
+    }
 });
 
 
