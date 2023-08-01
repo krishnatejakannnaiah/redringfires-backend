@@ -1,16 +1,17 @@
 const asyncHandler = require('express-async-handler');
 
 const postSchema = require("../models/postModal");
+const usersSchema = require("../models/userModel")
 const { Mongoose } = require('mongoose');
 
 const getAllPosts = asyncHandler(async (req, res) => {
-    const allPosts = await postSchema.find();
+    const allPosts = await postSchema.find().populate("user_id", "username");
     res.status(200).json(allPosts);
 })
 
 
 const getPosts = asyncHandler(async (req, res) => {
-    const posts = await postSchema.find({user_id: req.user.id});
+    const posts = await postSchema.find({user_id: req.user.id}).populate("user_id", "username");
     res.status(200).json(posts);
 });
 
