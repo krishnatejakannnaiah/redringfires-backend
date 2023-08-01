@@ -94,5 +94,17 @@ const deletePost = asyncHandler(async (req, res) => {
 });
 
 
+const deleteAllPost = asyncHandler(async (req, res) => {
+    try {
+        // Delete all posts
+        const result = await postSchema.deleteMany();
+    
+        return res.json({ message: 'All posts deleted successfully', deletedCount: result.deletedCount });
+      } catch (err) {
+        return res.status(500).json({ error: 'Failed to delete posts' });
+      }
+})
 
-module.exports = { getAllPosts, getPosts, getPost, createPost, editPost, deletePost }
+
+
+module.exports = { getAllPosts, getPosts, getPost, createPost, editPost, deletePost, deleteAllPost }
