@@ -5,13 +5,13 @@ const usersSchema = require("../models/userModel")
 const { Mongoose } = require('mongoose');
 
 const getAllPosts = asyncHandler(async (req, res) => {
-    const allPosts = await postSchema.find().populate("user_id", "username");
+    const allPosts = await postSchema.find().populate("user_id", "username profile_picture email");
     res.status(200).json(allPosts);
 })
 
 
 const getPosts = asyncHandler(async (req, res) => {
-    const posts = await postSchema.find({user_id: req.user.id}).populate("user_id", "username");
+    const posts = await postSchema.find({user_id: req.user.id}).populate("user_id", "username profile_picture email");
     res.status(200).json(posts);
 });
 
