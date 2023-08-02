@@ -20,6 +20,11 @@ const getUserPosts = asyncHandler(async (req, res) => {
     res.status(200).json(posts);
 })
 
+const getCategoryPosts = asyncHandler(async (req, res) => {
+    const posts = await postSchema.find({category: req.params.id}).populate("user_id", "username profile_picture email");
+    res.status(200).json(posts);
+})
+
 
 const getPost = asyncHandler(async (req, res) => {
     const post = await postSchema.findById(req.params.id);
@@ -112,4 +117,4 @@ const deleteAllPost = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { getAllPosts, getPosts, getPost, createPost, editPost, deletePost, deleteAllPost, getUserPosts }
+module.exports = { getAllPosts, getPosts, getPost, createPost, editPost, deletePost, deleteAllPost, getUserPosts, getCategoryPosts }

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllPosts, getPosts, getPost, createPost, editPost, deletePost, deleteAllPost, getUserPosts } = require("../controllers/postController");
+const { getAllPosts, getPosts, getPost, createPost, editPost, deletePost, deleteAllPost, getUserPosts, getCategoryPosts } = require("../controllers/postController");
 const validateToken = require("../middleware/validateTokenHandler");
 
 router.get("/allposts", getAllPosts);
@@ -19,6 +19,8 @@ router.delete("/deletepost/:id", validateToken, deletePost);
 router.delete("/deleteallposts", validateToken, deleteAllPost)
 
 router.get("/user/:id", validateToken, getUserPosts)
+
+router.get("/category/:id", validateToken, getCategoryPosts)
 
 
 
