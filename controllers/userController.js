@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const user = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const postSchema = require("../models/postModal");
 
 const registerUser = asyncHandler(async (req,res) => {
     const {username, email, password, profile_picture} = req.body;
@@ -108,12 +109,28 @@ const deleteUser = asyncHandler(async (req, res) => {
         throw new Error("User dont have the permission");
     }
 
-    const result = await User.deleteOne()
-    const reply = `Post with ID ${result._id} deleted`
-    res.json(reply)
 
+    try {
+        const deletionResult = await postSchema.deleteMany({ user_id: req.user.id });
+        console.log(deletionResult.deletedCount);
+        // const posts = await postSchema.find({user_id: req.user.id})
+        // console.log(posts)
+
+        // const result = await posts.deleteMany();
+        // return res.json({ message: 'All posts deleted successfully', deletedCount: result.deletedCount });
+        // console.log(posts, result)
+    const result1 = await User.deleteOne()
+    const reply = `Post with ID ${result1._id} deleted`
+    res.json(reply)
     const deletingUser = await User.findByIdAndDelete(req.params.id);
-    res.status(200).json({data: `deleted user ${req.params.id}`, user: deletingUser})
+    res.status(200).json({data: `deleted user ${req.params.id}`, user: deletingUser, deletedCount: deletionResult.deletedCount })
+
+    }
+    catch (err) {
+        return res.status(500).json({ error: err });
+    }
+
+
 })
 
 const editUser = asyncHandler(async (req, res) => {
