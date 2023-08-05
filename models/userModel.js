@@ -17,7 +17,11 @@ const usersSchema = mongoose.Schema({
     profile_picture: {
         type: String,
         required: false
-    }
+    },
+    verified: {
+        type: Boolean,
+        required: false
+    },
 }, {
     timestamps: true,
 })
