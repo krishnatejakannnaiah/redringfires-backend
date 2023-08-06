@@ -22,6 +22,14 @@ const usersSchema = mongoose.Schema({
         type: Boolean,
         required: false
     },
+    bio: {
+        type: String,
+        required: false
+    },
+    gender: {
+        type: String,
+        required: false
+    }
 }, {
     timestamps: true,
 })

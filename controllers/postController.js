@@ -5,23 +5,23 @@ const usersSchema = require("../models/userModel")
 const { Mongoose } = require('mongoose');
 
 const getAllPosts = asyncHandler(async (req, res) => {
-    const allPosts = await postSchema.find().populate("user_id", "username profile_picture email verified");
+    const allPosts = await postSchema.find().populate("user_id", "username profile_picture email verified bio gender");
     res.status(200).json(allPosts);
 })
 
 
 const getPosts = asyncHandler(async (req, res) => {
-    const posts = await postSchema.find({user_id: req.user.id}).populate("user_id", "username profile_picture email verified");
+    const posts = await postSchema.find({user_id: req.user.id}).populate("user_id", "username profile_picture email verified bio gender");
     res.status(200).json(posts);
 });
 
 const getUserPosts = asyncHandler(async (req, res) => {
-    const posts = await postSchema.find({user_id: req.params.id}).populate("user_id", "username profile_picture email verified");
+    const posts = await postSchema.find({user_id: req.params.id}).populate("user_id", "username profile_picture email verified bio gender");
     res.status(200).json(posts);
 })
 
 const getCategoryPosts = asyncHandler(async (req, res) => {
-    const posts = await postSchema.find({category: req.params.id}).populate("user_id", "username profile_picture email verified");
+    const posts = await postSchema.find({category: req.params.id}).populate("user_id", "username profile_picture email verified bio gender");
     res.status(200).json(posts);
 })
 

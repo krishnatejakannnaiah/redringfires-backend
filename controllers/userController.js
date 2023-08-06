@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const postSchema = require("../models/postModal");
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, profile_picture, verified } = req.body;
+  const { username, email, password, profile_picture, verified, bio, gender } = req.body;
   if (!username || !email || !password) {
     res.status(400);
     throw new Error("All fields are mandatory");
@@ -23,7 +23,9 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password: hashedPassword,
     profile_picture,
-    verified
+    verified,
+    bio,
+    gender
   });
   if (User) {
     res
@@ -33,7 +35,9 @@ const registerUser = asyncHandler(async (req, res) => {
         email: User.email,
         username: User.username,
         profile_picture: User.profile_picture,
-        verified: User.verified
+        verified: User.verified,
+        bio: User.bio,
+        gender: User.gender
       });
   } else {
     res.status(400);
