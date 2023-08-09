@@ -3,9 +3,10 @@ const user = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const postSchema = require("../models/postModal");
-
+const usersSchema = require("../models/userModel");
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, profile_picture, verified, bio, gender } = req.body;
+  const { username, email, password, profile_picture, verified, bio, gender } =
+    req.body;
   if (!username || !email || !password) {
     res.status(400);
     throw new Error("All fields are mandatory");
@@ -25,20 +26,18 @@ const registerUser = asyncHandler(async (req, res) => {
     profile_picture,
     verified,
     bio,
-    gender
+    gender,
   });
   if (User) {
-    res
-      .status(200)
-      .json({
-        id: User.id,
-        email: User.email,
-        username: User.username,
-        profile_picture: User.profile_picture,
-        verified: User.verified,
-        bio: User.bio,
-        gender: User.gender
-      });
+    res.status(200).json({
+      id: User.id,
+      email: User.email,
+      username: User.username,
+      profile_picture: User.profile_picture,
+      verified: User.verified,
+      bio: User.bio,
+      gender: User.gender,
+    });
   } else {
     res.status(400);
     throw new Error("userdata is not valid!");
@@ -127,13 +126,11 @@ const deleteUser = asyncHandler(async (req, res) => {
     const reply = `Post with ID ${result1._id} deleted`;
     res.json(reply);
     const deletingUser = await User.findByIdAndDelete(req.params.id);
-    res
-      .status(200)
-      .json({
-        data: `deleted user ${req.params.id}`,
-        user: deletingUser,
-        deletedCount: deletionResult.deletedCount,
-      });
+    res.status(200).json({
+      data: `deleted user ${req.params.id}`,
+      user: deletingUser,
+      deletedCount: deletionResult.deletedCount,
+    });
   } catch (err) {
     return res.status(500).json({ error: err });
   }
@@ -142,6 +139,8 @@ const deleteUser = asyncHandler(async (req, res) => {
 const editUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const User = await user.findById(id).exec();
+  console.log(User);
+
   if (!User) {
     res.status(404);
     throw new Error("user not found!");
@@ -161,6 +160,54 @@ const editUser = asyncHandler(async (req, res) => {
     .json({ data: `User updated ${req.params.id}`, user: updatedUser });
 });
 
+const connectUser = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.user;
+    const userData = await user.findById(id);
+    const { userId } = req.body;
+    const connectedUser = await user.findById(userId).exec();
+
+    if (!id || !connectedUser) {
+      res.status(404);
+      throw new Error("user not found!");
+    }
+    userData.connections.push(connectedUser._id);
+    await userData.save();
+    return res
+      .status(200)
+      .json({ message: "Connected successfully", userData });
+  } catch (error) {
+    return res.status(500).json({ message: "Error connecting users" });
+  }
+});
+
+const disConnect = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { userId } = req.body;
+
+    console.log(id, req.body.userId);
+
+    const User = await user.findById(id).exec();
+    const disconnectedUser = await user.findById(userId).exec();
+
+    if (!User || !disconnectedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    User.connections = User.connections.filter(
+      (connection) => !connection.equals(disconnectedUser._id)
+    );
+
+    await User.save();
+
+    return res.status(200).json({ message: "Disconnected successfully", User });
+  } catch (error) {
+    return res.status(500).json({ message: "Error disconnecting users" });
+  }
+
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -169,4 +216,6 @@ module.exports = {
   deleteUser,
   editUser,
   getUser,
+  connectUser,
+  disConnect,
 };
