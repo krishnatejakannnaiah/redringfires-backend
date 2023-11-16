@@ -1,5 +1,5 @@
 const express = require("express");
-const errorHandler = require("./middleware/errorHandler");
+// const errorHandler = require("./middleware/errorHandler");
 // const connectDb = require("./config/dbConnection");
 // const { default: mongoose } = require("mongoose");
 const dotenv = require('dotenv').config();
@@ -21,7 +21,7 @@ app.use(express.json());
 // app.use("/api/claps", require('./routes/clapRoutes'));
 app.use("/api", require("./routes/scrapesRoutes"));
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 app.get('/', (req,res) => {
     res.send({title: 'RedRingFires'})
