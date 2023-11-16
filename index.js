@@ -23,6 +23,7 @@ app.use("/api", require("./routes/scrapesRoutes"));
 
 app.use(errorHandler);
 
+
 app.get('/', (req,res) => {
     res.send({title: 'RedRingFires'})
 })
