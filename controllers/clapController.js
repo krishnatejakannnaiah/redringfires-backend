@@ -1,29 +1,38 @@
 const asyncHandler = require('express-async-handler');
-const clapSchema = require("../models/claps");
-
-const getAllClaps = asyncHandler(async (req, res) => {
-    const allClaps = await clapSchema.find();
-    res.status(200).json(allClaps);
-})
-
-
-// const getClaps = asyncHandler(async (req, res) => {
-//     const posts = await postSchema.find({user_id: req.user.id});
-
-// })
-
+const clapSchema = require("../models/LikeSchema");
+const postSchema = require("../models/postModal");
+const usersSchema = require("../models/userModel");
 
 const createClap = asyncHandler(async (req, res) => {
-    const { post_id, email, username,} = req.body;
-    if (!post_id || !email || !username) {
-        res.status(400).json("All fields are required");
-        throw new Error("All fields are required");
+    try {
+    const { id } = req.params;
+    const { user_id } = req.body;
+    const like = new clapSchema();
+    await like.save();
+
+    const User = await usersSchema.findById(user_id).exec();
+
+    console.log(like);
+
+    const post = await postSchema.findByIdAndUpdate(
+        id,
+        { $push: { claps: like, user: user_id, userData: User } },
+        { new: true }
+      ).populate('claps');
+  
+      res.status(200).json(post);
     }
-    const Clap = await clapSchema.create({
-        post_id, email, username, user_id: req.user.id,
-    })
-    res.status(201).json(Clap);
+    catch {
+        res.status(500).json({ error: error.message });
+    }
+    
+
 })
 
 
-module.exports = { createClap,  getAllClaps};
+
+
+
+
+
+module.exports = { createClap }

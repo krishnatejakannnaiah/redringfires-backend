@@ -15,7 +15,11 @@ const usersSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the userpassword"],
     },
-    connections: [{ 
+    following: [{ 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "User" 
+    }],
+    followers: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User" 
     }],

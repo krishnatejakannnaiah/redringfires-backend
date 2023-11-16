@@ -37,7 +37,8 @@ const postSchema = mongoose.Schema({
     media_type: {
         type: String,
         required: false
-    }
+    },
+    claps: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Clap' }],
 }, {
     timestamps: true,
 })

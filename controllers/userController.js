@@ -119,7 +119,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
   try {
     const deletionResult = await postSchema.deleteMany({
-      user_id: req.user.id,
+      user_id: req.params.id,
     });
     console.log(deletionResult.deletedCount);
     const result1 = await User.deleteOne();
@@ -171,7 +171,8 @@ const connectUser = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error("user not found!");
     }
-    userData.connections.push(connectedUser._id);
+    userData.following.push(connectedUser._id);
+    connectedUser.followers.push(connectedUser._id)
     await userData.save();
     return res
       .status(200)
@@ -195,8 +196,11 @@ const disConnect = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    User.connections = User.connections.filter(
+    User.following = User.following.filter(
       (connection) => !connection.equals(disconnectedUser._id)
+    );
+    disconnectedUser.followers = disconnectedUser.followers.filter(
+        (connection) => !connection.equals(disconnectedUser._id)
     );
 
     await User.save();

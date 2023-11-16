@@ -5,19 +5,19 @@ const usersSchema = require("../models/userModel")
 const { Mongoose } = require('mongoose');
 
 const getAllPosts = asyncHandler(async (req, res) => {
-    const allPosts = await postSchema.find().populate("user_id", "username profile_picture email verified bio gender connections");
+    const allPosts = await postSchema.find().populate("user_id", "username profile_picture email verified bio gender following claps");
     res.status(200).json(allPosts);
 })
 
 const getFireFeed = asyncHandler(async (req, res) => {
     const { id } = req.user
     try {
-        const user = await usersSchema.findById(id).populate("username profile_picture email verified bio gender connections");
+        const user = await usersSchema.findById(id).populate("username profile_picture email verified bio gender following claps");
         if (!user) {
           return res.status(404).json({ message: 'User not found' });
         }
 
-        const connectionIds = user.connections.map(connection => connection._id);
+        const connectionIds = user.following.map(connection => connection._id);
         const fires = await postSchema.find({ user_id: { $in: connectionIds } });
         return res.status(200).json(fires);
     }
@@ -28,17 +28,17 @@ const getFireFeed = asyncHandler(async (req, res) => {
 
 
 const getPosts = asyncHandler(async (req, res) => {
-    const posts = await postSchema.find({user_id: req.user.id}).populate("user_id", "username profile_picture email verified bio gender connections");
+    const posts = await postSchema.find({user_id: req.user.id}).populate("user_id", "username profile_picture email verified bio gender following claps");
     res.status(200).json(posts);
 });
 
 const getUserPosts = asyncHandler(async (req, res) => {
-    const posts = await postSchema.find({user_id: req.params.id}).populate("user_id", "username profile_picture email verified bio gender connections");
+    const posts = await postSchema.find({user_id: req.params.id}).populate("user_id", "username profile_picture email verified bio gender following claps");
     res.status(200).json(posts);
 })
 
 const getCategoryPosts = asyncHandler(async (req, res) => {
-    const posts = await postSchema.find({category: req.params.id}).populate("user_id", "username profile_picture email verified bio gender connections");
+    const posts = await postSchema.find({category: req.params.id}).populate("user_id", "username profile_picture email verified bio gender following claps");
     res.status(200).json(posts);
 })
 
